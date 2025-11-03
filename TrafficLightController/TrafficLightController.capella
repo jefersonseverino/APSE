@@ -65,7 +65,9 @@
           <ownedFunctions xsi:type="org.polarsys.capella.core.data.oa:OperationalActivity"
               id="af6bd17d-bcae-40fe-9ab3-ff06de57f64d" name="Move"/>
           <ownedFunctions xsi:type="org.polarsys.capella.core.data.oa:OperationalActivity"
-              id="bde8403f-8455-4638-99bc-b73bdf915e4a" name="Detect a free opposite lane"/>
+              id="bde8403f-8455-4638-99bc-b73bdf915e4a" name="Detect a free intersection lane (left/right)"/>
+          <ownedFunctions xsi:type="org.polarsys.capella.core.data.oa:OperationalActivity"
+              id="44d54389-f2fe-40e2-8241-aaa510076a6a" name="Detect no cars in lane"/>
           <ownedFunctionalExchanges xsi:type="org.polarsys.capella.core.data.fa:FunctionalExchange"
               id="0516ffe2-1061-4e8c-982e-82552f1c9f35" name="Car waits " target="#b5c90f43-3726-41dd-8ad6-9db5de6b95bb"
               source="#e272fc1d-0173-4a83-b27a-84ed58f83f5f"/>
@@ -73,7 +75,7 @@
               id="b05a4fdb-5868-4604-a71e-4b5c987ce78c" name="Sensor Detects that the car is stopped"
               target="#e72e1522-6ac8-40e4-bfa5-30d0c9ea4c4e" source="#b5c90f43-3726-41dd-8ad6-9db5de6b95bb"/>
           <ownedFunctionalExchanges xsi:type="org.polarsys.capella.core.data.fa:FunctionalExchange"
-              id="27bb2e25-f06b-40ea-abba-c3df7d870463" name="Detect if there is no traffic in opposite lane"
+              id="27bb2e25-f06b-40ea-abba-c3df7d870463" name="Detect if there is no traffic in the intersection lane"
               target="#bde8403f-8455-4638-99bc-b73bdf915e4a" source="#e72e1522-6ac8-40e4-bfa5-30d0c9ea4c4e"/>
           <ownedFunctionalExchanges xsi:type="org.polarsys.capella.core.data.fa:FunctionalExchange"
               id="cb27fbce-2fc3-4768-a95f-26fc92073b4f" name="Turn traffic lights to green"
@@ -81,6 +83,9 @@
           <ownedFunctionalExchanges xsi:type="org.polarsys.capella.core.data.fa:FunctionalExchange"
               id="f04d76bd-48de-481f-95ec-cf329540930d" name="Car moves" target="#af6bd17d-bcae-40fe-9ab3-ff06de57f64d"
               source="#ca5663ff-f4e3-40a9-a8a5-c0c7197edb4c"/>
+          <ownedFunctionalExchanges xsi:type="org.polarsys.capella.core.data.fa:FunctionalExchange"
+              id="e558b093-1b00-4fed-a46a-a6ababe74a8b" name="Cars passing" target="#44d54389-f2fe-40e2-8241-aaa510076a6a"
+              source="#af6bd17d-bcae-40fe-9ab3-ff06de57f64d"/>
         </ownedOperationalActivities>
       </ownedFunctionPkg>
       <ownedAbstractCapabilityPkg xsi:type="org.polarsys.capella.core.data.oa:OperationalCapabilityPkg"
@@ -104,7 +109,7 @@
                 kind="ASYNCHRONOUS_CALL" sendingEnd="#e1c91f93-1967-4e53-811a-67574c233964"
                 receivingEnd="#47fc8c48-299c-49af-85a1-aaa0af84b8e7"/>
             <ownedMessages xsi:type="org.polarsys.capella.core.data.interaction:SequenceMessage"
-                id="736fbfa2-caf4-4d6f-8581-0642f0901395" name="Detect if there is no traffic in opposite lane"
+                id="736fbfa2-caf4-4d6f-8581-0642f0901395" name="Detect if there is no traffic in the intersection lane"
                 kind="ASYNCHRONOUS_CALL" sendingEnd="#48075030-582a-4320-851a-453854b28cbd"
                 receivingEnd="#8d701ed0-34e0-4b49-bd0e-886da8dda042"/>
             <ownedMessages xsi:type="org.polarsys.capella.core.data.interaction:SequenceMessage"
@@ -114,6 +119,9 @@
             <ownedMessages xsi:type="org.polarsys.capella.core.data.interaction:SequenceMessage"
                 id="50830177-ceb2-4da8-88af-53b632ad1dc7" name="Car moves" kind="ASYNCHRONOUS_CALL"
                 sendingEnd="#e7853584-357c-47de-85d9-03e98451f095" receivingEnd="#b03db260-f0f8-4e52-919e-099cf7f31319"/>
+            <ownedMessages xsi:type="org.polarsys.capella.core.data.interaction:SequenceMessage"
+                id="021debed-c06a-457d-b6c0-216688c2da16" name="Cars passing" kind="ASYNCHRONOUS_CALL"
+                sendingEnd="#c4b70338-ba97-474c-b278-a298545a7415" receivingEnd="#84536cb7-3e9f-4684-a1e0-9f6a518f6ec9"/>
             <ownedInteractionFragments xsi:type="org.polarsys.capella.core.data.interaction:InteractionState"
                 id="11856618-9b9b-4aea-8643-7ac7f86b3ae7" name="Turn off green lights"
                 coveredInstanceRoles="#f762d24c-7f5c-4566-bbef-83d4f8f8b6b8" relatedAbstractFunction="#e272fc1d-0173-4a83-b27a-84ed58f83f5f"/>
@@ -195,6 +203,21 @@
             <ownedInteractionFragments xsi:type="org.polarsys.capella.core.data.interaction:ExecutionEnd"
                 id="8503f5c5-dd7d-44ad-87dc-0dd7706fabd9" name="endExec" coveredInstanceRoles="#781d32f5-c31b-4e3c-bb18-bc88005a1653"
                 event="#b7a64850-d061-4dc2-9053-090aa8114761"/>
+            <ownedInteractionFragments xsi:type="org.polarsys.capella.core.data.interaction:MessageEnd"
+                id="c4b70338-ba97-474c-b278-a298545a7415" name="Send Call Message Call"
+                coveredInstanceRoles="#781d32f5-c31b-4e3c-bb18-bc88005a1653" event="#4d5bc2a8-49b7-4978-960b-8a20714327a0"/>
+            <ownedInteractionFragments xsi:type="org.polarsys.capella.core.data.interaction:MessageEnd"
+                id="84536cb7-3e9f-4684-a1e0-9f6a518f6ec9" name="Receive Call Message Call"
+                coveredInstanceRoles="#1edd231a-8b8a-4ac6-9e5b-46c3e05de1e2" event="#894075cc-2865-43b4-911a-5a25d43e7d39"/>
+            <ownedInteractionFragments xsi:type="org.polarsys.capella.core.data.interaction:InteractionState"
+                id="05aa48e4-b47b-494f-a196-bbc60e5b985e" name="Detect no cars in lane"
+                coveredInstanceRoles="#1edd231a-8b8a-4ac6-9e5b-46c3e05de1e2" relatedAbstractFunction="#44d54389-f2fe-40e2-8241-aaa510076a6a"/>
+            <ownedInteractionFragments xsi:type="org.polarsys.capella.core.data.interaction:InteractionState"
+                id="54030221-7331-4902-90cb-c2d0f06f2341" name="Detect no cars in lane"
+                coveredInstanceRoles="#1edd231a-8b8a-4ac6-9e5b-46c3e05de1e2" relatedAbstractFunction="#44d54389-f2fe-40e2-8241-aaa510076a6a"/>
+            <ownedInteractionFragments xsi:type="org.polarsys.capella.core.data.interaction:ExecutionEnd"
+                id="3dbcc534-fd01-44aa-922e-d5448688d7aa" name="endExec" coveredInstanceRoles="#1edd231a-8b8a-4ac6-9e5b-46c3e05de1e2"
+                event="#ae7769f3-34bb-4d4d-80ff-7f6dbcff6cd0"/>
             <ownedTimeLapses xsi:type="org.polarsys.capella.core.data.interaction:StateFragment"
                 id="d985c8d8-b2dc-4084-bf0a-a9ed9e75a997" start="#66ce80e3-62fa-4691-b558-2e0220426909"
                 finish="#3306b751-766b-4c16-b223-d9a39b07b473" relatedAbstractFunction="#e72e1522-6ac8-40e4-bfa5-30d0c9ea4c4e"/>
@@ -228,6 +251,12 @@
             <ownedTimeLapses xsi:type="org.polarsys.capella.core.data.interaction:Execution"
                 id="1f62b62c-4438-4f02-bff6-d1dafb7096e9" start="#b03db260-f0f8-4e52-919e-099cf7f31319"
                 finish="#8503f5c5-dd7d-44ad-87dc-0dd7706fabd9"/>
+            <ownedTimeLapses xsi:type="org.polarsys.capella.core.data.interaction:StateFragment"
+                id="6b8f6b8d-4900-42e0-a68d-f932f94cc327" start="#05aa48e4-b47b-494f-a196-bbc60e5b985e"
+                finish="#54030221-7331-4902-90cb-c2d0f06f2341" relatedAbstractFunction="#44d54389-f2fe-40e2-8241-aaa510076a6a"/>
+            <ownedTimeLapses xsi:type="org.polarsys.capella.core.data.interaction:Execution"
+                id="4944cd69-b270-46ca-a124-38703597d061" start="#84536cb7-3e9f-4684-a1e0-9f6a518f6ec9"
+                finish="#3dbcc534-fd01-44aa-922e-d5448688d7aa"/>
             <ownedEvents xsi:type="org.polarsys.capella.core.data.interaction:EventSentOperation"
                 id="8d8695be-b5d7-4f2c-8907-7838558d042f" operation="#0516ffe2-1061-4e8c-982e-82552f1c9f35"/>
             <ownedEvents xsi:type="org.polarsys.capella.core.data.interaction:EventReceiptOperation"
@@ -258,6 +287,12 @@
                 id="f2d589ff-9da1-422e-8a38-76a18f520582" operation="#f04d76bd-48de-481f-95ec-cf329540930d"/>
             <ownedEvents xsi:type="org.polarsys.capella.core.data.interaction:ExecutionEvent"
                 id="b7a64850-d061-4dc2-9053-090aa8114761"/>
+            <ownedEvents xsi:type="org.polarsys.capella.core.data.interaction:EventSentOperation"
+                id="4d5bc2a8-49b7-4978-960b-8a20714327a0" operation="#e558b093-1b00-4fed-a46a-a6ababe74a8b"/>
+            <ownedEvents xsi:type="org.polarsys.capella.core.data.interaction:EventReceiptOperation"
+                id="894075cc-2865-43b4-911a-5a25d43e7d39" operation="#e558b093-1b00-4fed-a46a-a6ababe74a8b"/>
+            <ownedEvents xsi:type="org.polarsys.capella.core.data.interaction:ExecutionEvent"
+                id="ae7769f3-34bb-4d4d-80ff-7f6dbcff6cd0"/>
           </ownedScenarios>
           <ownedEntityOperationalCapabilityInvolvements xsi:type="org.polarsys.capella.core.data.oa:EntityOperationalCapabilityInvolvement"
               id="60590641-3a70-4f99-b645-81234d5b00ce" involved="#74131e99-ac4c-4ecb-9b70-e760d42a34b3"/>
@@ -306,6 +341,9 @@
               sourceElement="#74131e99-ac4c-4ecb-9b70-e760d42a34b3"/>
           <ownedFunctionalAllocation xsi:type="org.polarsys.capella.core.data.fa:ComponentFunctionalAllocation"
               id="e42e1c61-9e50-463d-acba-9f6d82b2de43" targetElement="#bde8403f-8455-4638-99bc-b73bdf915e4a"
+              sourceElement="#74131e99-ac4c-4ecb-9b70-e760d42a34b3"/>
+          <ownedFunctionalAllocation xsi:type="org.polarsys.capella.core.data.fa:ComponentFunctionalAllocation"
+              id="01df0107-2d9a-4ffa-b90b-d07f1b5377ae" targetElement="#44d54389-f2fe-40e2-8241-aaa510076a6a"
               sourceElement="#74131e99-ac4c-4ecb-9b70-e760d42a34b3"/>
         </ownedEntities>
       </ownedEntityPkg>
