@@ -98,7 +98,8 @@
             <ownedInstanceRoles xsi:type="org.polarsys.capella.core.data.interaction:InstanceRole"
                 id="1edd231a-8b8a-4ac6-9e5b-46c3e05de1e2" name="Sensor" representedInstance="#12e5f999-b578-4a4c-8a2f-083597c7c468"/>
             <ownedInstanceRoles xsi:type="org.polarsys.capella.core.data.interaction:InstanceRole"
-                id="f762d24c-7f5c-4566-bbef-83d4f8f8b6b8" name="Traffic Light" representedInstance="#623e0a8c-af6a-40ca-96a1-e78d4bd9bc0a"/>
+                id="f762d24c-7f5c-4566-bbef-83d4f8f8b6b8" name="Traffic Light Contrl"
+                representedInstance="#623e0a8c-af6a-40ca-96a1-e78d4bd9bc0a"/>
             <ownedInstanceRoles xsi:type="org.polarsys.capella.core.data.interaction:InstanceRole"
                 id="781d32f5-c31b-4e3c-bb18-bc88005a1653" name="Car" representedInstance="#af8d1345-e6aa-47a3-9262-5993cdb67a5c"/>
             <ownedMessages xsi:type="org.polarsys.capella.core.data.interaction:SequenceMessage"
@@ -301,6 +302,11 @@
           <ownedEntityOperationalCapabilityInvolvements xsi:type="org.polarsys.capella.core.data.oa:EntityOperationalCapabilityInvolvement"
               id="9ca93ace-3388-467c-bd93-c2e0b6e761c3" involved="#5e48fc34-b215-4d03-92dc-d97076837525"/>
         </ownedOperationalCapabilities>
+        <ownedOperationalCapabilities xsi:type="org.polarsys.capella.core.data.oa:OperationalCapability"
+            id="d436bd54-e29a-462c-a047-0caeb300a4bf" name="Detect presence  and queue lenght">
+          <ownedEntityOperationalCapabilityInvolvements xsi:type="org.polarsys.capella.core.data.oa:EntityOperationalCapabilityInvolvement"
+              id="fd1b97e0-8871-437f-b03b-eccf2d5a9930" involved="#74131e99-ac4c-4ecb-9b70-e760d42a34b3"/>
+        </ownedOperationalCapabilities>
       </ownedAbstractCapabilityPkg>
       <ownedInterfacePkg xsi:type="org.polarsys.capella.core.data.cs:InterfacePkg"
           id="afa27df5-1af1-45d0-aeb4-8bb2e8549252" name="Interfaces"/>
@@ -313,7 +319,7 @@
         <ownedParts xsi:type="org.polarsys.capella.core.data.cs:Part" id="af8d1345-e6aa-47a3-9262-5993cdb67a5c"
             name="Car" abstractType="#5e48fc34-b215-4d03-92dc-d97076837525"/>
         <ownedParts xsi:type="org.polarsys.capella.core.data.cs:Part" id="623e0a8c-af6a-40ca-96a1-e78d4bd9bc0a"
-            name="Traffic Light" abstractType="#54042d07-85e7-4b2a-9d4c-1930c5f2566d"/>
+            name="Traffic Light Contrl" abstractType="#54042d07-85e7-4b2a-9d4c-1930c5f2566d"/>
         <ownedParts xsi:type="org.polarsys.capella.core.data.cs:Part" id="12e5f999-b578-4a4c-8a2f-083597c7c468"
             name="Sensor" abstractType="#74131e99-ac4c-4ecb-9b70-e760d42a34b3"/>
         <ownedEntities xsi:type="org.polarsys.capella.core.data.oa:Entity" id="5e48fc34-b215-4d03-92dc-d97076837525"
@@ -326,7 +332,7 @@
               sourceElement="#5e48fc34-b215-4d03-92dc-d97076837525"/>
         </ownedEntities>
         <ownedEntities xsi:type="org.polarsys.capella.core.data.oa:Entity" id="54042d07-85e7-4b2a-9d4c-1930c5f2566d"
-            name="Traffic Light" actor="true" human="true">
+            name="Traffic Light Contrl" actor="true" human="true">
           <ownedFunctionalAllocation xsi:type="org.polarsys.capella.core.data.fa:ComponentFunctionalAllocation"
               id="7dde2cc6-1344-4f8d-aeca-54c39c067516" targetElement="#ca5663ff-f4e3-40a9-a8a5-c0c7197edb4c"
               sourceElement="#54042d07-85e7-4b2a-9d4c-1930c5f2566d"/>
@@ -354,13 +360,142 @@
           id="3807922b-5f37-406e-8261-7263b8b31862" name="System Functions">
         <ownedSystemFunctions xsi:type="org.polarsys.capella.core.data.ctx:SystemFunction"
             id="686f4be4-04f1-44e0-907a-01eed1d74e80" name="Root System Function">
+          <ownedFunctions xsi:type="org.polarsys.capella.core.data.ctx:SystemFunction"
+              id="fe5b6786-2d57-4a6d-98e0-6906c05920d8" name="Wait For Traffic Light">
+            <inputs xsi:type="org.polarsys.capella.core.data.fa:FunctionInputPort"
+                id="ddf2b838-79ee-406e-a98a-c869a951b675" name="inCar waits "/>
+            <outputs xsi:type="org.polarsys.capella.core.data.fa:FunctionOutputPort"
+                id="219c8a12-1c38-4add-935f-cef6b4abbd06" name="outSensor Detects that the car is stopped"/>
+            <ownedFunctionRealizations xsi:type="org.polarsys.capella.core.data.fa:FunctionRealization"
+                id="0dd6e018-87cf-4f92-9d9c-3e51712c9e6b" targetElement="#b5c90f43-3726-41dd-8ad6-9db5de6b95bb"
+                sourceElement="#fe5b6786-2d57-4a6d-98e0-6906c05920d8"/>
+          </ownedFunctions>
+          <ownedFunctions xsi:type="org.polarsys.capella.core.data.ctx:SystemFunction"
+              id="3d054259-4a43-46d9-97ac-c28d0f8752dc" name="Turn on green lights">
+            <inputs xsi:type="org.polarsys.capella.core.data.fa:FunctionInputPort"
+                id="9d50bda5-b8da-4a2d-b6f5-66684d69c298" name="inTurn traffic lights to green"/>
+            <outputs xsi:type="org.polarsys.capella.core.data.fa:FunctionOutputPort"
+                id="a9fcc6d3-dd69-48e2-b364-9241daebfe9e" name="outCar moves"/>
+            <ownedFunctionRealizations xsi:type="org.polarsys.capella.core.data.fa:FunctionRealization"
+                id="2fe6593e-29cf-4915-8b7b-8de58a121ba9" targetElement="#ca5663ff-f4e3-40a9-a8a5-c0c7197edb4c"
+                sourceElement="#3d054259-4a43-46d9-97ac-c28d0f8752dc"/>
+          </ownedFunctions>
+          <ownedFunctions xsi:type="org.polarsys.capella.core.data.ctx:SystemFunction"
+              id="fbddf649-fd9b-46ff-8fe9-b535005f531e" name="Detect a Stopped Car">
+            <inputs xsi:type="org.polarsys.capella.core.data.fa:FunctionInputPort"
+                id="a6f855df-13bb-41d6-b998-a52e1a0cc129" name="inSensor Detects that the car is stopped"/>
+            <outputs xsi:type="org.polarsys.capella.core.data.fa:FunctionOutputPort"
+                id="23e551a9-c33b-4d94-af9a-048a6f0177e6" name="outDetect if there is no traffic in the intersection lane"/>
+            <ownedFunctionRealizations xsi:type="org.polarsys.capella.core.data.fa:FunctionRealization"
+                id="5fbdb07d-18a8-41b5-b847-fc96df8a7a6a" targetElement="#e72e1522-6ac8-40e4-bfa5-30d0c9ea4c4e"
+                sourceElement="#fbddf649-fd9b-46ff-8fe9-b535005f531e"/>
+          </ownedFunctions>
+          <ownedFunctions xsi:type="org.polarsys.capella.core.data.ctx:SystemFunction"
+              id="611faec4-5058-49e0-be9e-4e6c86f43c94" name="Turn off green lights">
+            <outputs xsi:type="org.polarsys.capella.core.data.fa:FunctionOutputPort"
+                id="1e4141e6-d4ec-4a27-8bd9-debf0175c9f2" name="outCar waits "/>
+            <ownedFunctionRealizations xsi:type="org.polarsys.capella.core.data.fa:FunctionRealization"
+                id="1dac5864-70f5-4faa-8469-d43b8fa053d2" targetElement="#e272fc1d-0173-4a83-b27a-84ed58f83f5f"
+                sourceElement="#611faec4-5058-49e0-be9e-4e6c86f43c94"/>
+          </ownedFunctions>
+          <ownedFunctions xsi:type="org.polarsys.capella.core.data.ctx:SystemFunction"
+              id="462a9086-a15b-42a2-94f2-c76ca1b29b89" name="Move">
+            <inputs xsi:type="org.polarsys.capella.core.data.fa:FunctionInputPort"
+                id="70fa7a41-53af-46a6-bbca-4d0a11b2ec75" name="inCar moves"/>
+            <outputs xsi:type="org.polarsys.capella.core.data.fa:FunctionOutputPort"
+                id="1f3d7a68-1064-4874-856a-c9dd530ae6ea" name="outCars passing"/>
+            <ownedFunctionRealizations xsi:type="org.polarsys.capella.core.data.fa:FunctionRealization"
+                id="918ddad6-e9da-4475-b361-ee5c773ed651" targetElement="#af6bd17d-bcae-40fe-9ab3-ff06de57f64d"
+                sourceElement="#462a9086-a15b-42a2-94f2-c76ca1b29b89"/>
+          </ownedFunctions>
+          <ownedFunctions xsi:type="org.polarsys.capella.core.data.ctx:SystemFunction"
+              id="2735238e-cdaa-4775-811a-86a318058351" name="Detect a free intersection lane (left/right)">
+            <inputs xsi:type="org.polarsys.capella.core.data.fa:FunctionInputPort"
+                id="7845c1ff-a5c8-47d1-97ec-38bb1b9f7685" name="inDetect if there is no traffic in the intersection lane"/>
+            <outputs xsi:type="org.polarsys.capella.core.data.fa:FunctionOutputPort"
+                id="9f7437f2-2465-4682-b70d-1bc0158d4840" name="outTurn traffic lights to green"/>
+            <ownedFunctionRealizations xsi:type="org.polarsys.capella.core.data.fa:FunctionRealization"
+                id="ffb2f879-b178-4240-a807-6fc21d0768be" targetElement="#bde8403f-8455-4638-99bc-b73bdf915e4a"
+                sourceElement="#2735238e-cdaa-4775-811a-86a318058351"/>
+          </ownedFunctions>
+          <ownedFunctions xsi:type="org.polarsys.capella.core.data.ctx:SystemFunction"
+              id="149138c6-aaf7-4408-9d6f-ebc6c4adce6e" name="Detect no cars in lane">
+            <inputs xsi:type="org.polarsys.capella.core.data.fa:FunctionInputPort"
+                id="33d460b6-f6a4-4bb1-86b0-5d6e8fc3d147" name="inCars passing"/>
+            <ownedFunctionRealizations xsi:type="org.polarsys.capella.core.data.fa:FunctionRealization"
+                id="dbe40e99-62db-4929-bd54-e8696a7660a3" targetElement="#44d54389-f2fe-40e2-8241-aaa510076a6a"
+                sourceElement="#149138c6-aaf7-4408-9d6f-ebc6c4adce6e"/>
+          </ownedFunctions>
           <ownedFunctionRealizations xsi:type="org.polarsys.capella.core.data.fa:FunctionRealization"
               id="4c740d7e-b2a2-4ff1-9d3f-2ac0caba66fb" targetElement="#a58c2d4d-9970-4332-89c4-2de29f6be902"
               sourceElement="#686f4be4-04f1-44e0-907a-01eed1d74e80"/>
+          <ownedFunctionalExchanges xsi:type="org.polarsys.capella.core.data.fa:FunctionalExchange"
+              id="2bea94b8-d7e2-4c8c-995d-127a11f69c7a" name="Car waits " target="#ddf2b838-79ee-406e-a98a-c869a951b675"
+              source="#1e4141e6-d4ec-4a27-8bd9-debf0175c9f2">
+            <ownedFunctionalExchangeRealizations xsi:type="org.polarsys.capella.core.data.fa:FunctionalExchangeRealization"
+                id="a496c04c-077f-4fa8-b822-927e04baeeae" targetElement="#0516ffe2-1061-4e8c-982e-82552f1c9f35"
+                sourceElement="#2bea94b8-d7e2-4c8c-995d-127a11f69c7a"/>
+          </ownedFunctionalExchanges>
+          <ownedFunctionalExchanges xsi:type="org.polarsys.capella.core.data.fa:FunctionalExchange"
+              id="bca4cf54-d7d4-4a3e-8ce0-705e95b05f9b" name="Sensor Detects that the car is stopped"
+              target="#a6f855df-13bb-41d6-b998-a52e1a0cc129" source="#219c8a12-1c38-4add-935f-cef6b4abbd06">
+            <ownedFunctionalExchangeRealizations xsi:type="org.polarsys.capella.core.data.fa:FunctionalExchangeRealization"
+                id="e5dd1923-a66c-4ea4-bbd0-27d5185e363a" targetElement="#b05a4fdb-5868-4604-a71e-4b5c987ce78c"
+                sourceElement="#bca4cf54-d7d4-4a3e-8ce0-705e95b05f9b"/>
+          </ownedFunctionalExchanges>
+          <ownedFunctionalExchanges xsi:type="org.polarsys.capella.core.data.fa:FunctionalExchange"
+              id="163422ac-e014-47f2-a589-9e5a347a71cd" name="Detect if there is no traffic in the intersection lane"
+              target="#7845c1ff-a5c8-47d1-97ec-38bb1b9f7685" source="#23e551a9-c33b-4d94-af9a-048a6f0177e6">
+            <ownedFunctionalExchangeRealizations xsi:type="org.polarsys.capella.core.data.fa:FunctionalExchangeRealization"
+                id="d4c0359d-b448-4ce2-95e0-9d04641379c9" targetElement="#27bb2e25-f06b-40ea-abba-c3df7d870463"
+                sourceElement="#163422ac-e014-47f2-a589-9e5a347a71cd"/>
+          </ownedFunctionalExchanges>
+          <ownedFunctionalExchanges xsi:type="org.polarsys.capella.core.data.fa:FunctionalExchange"
+              id="7b4ebe45-18c4-4ee3-8031-3e37b389d648" name="Turn traffic lights to green"
+              target="#9d50bda5-b8da-4a2d-b6f5-66684d69c298" source="#9f7437f2-2465-4682-b70d-1bc0158d4840">
+            <ownedFunctionalExchangeRealizations xsi:type="org.polarsys.capella.core.data.fa:FunctionalExchangeRealization"
+                id="215ac773-20d5-4f74-bc6c-f340c5ae025d" targetElement="#cb27fbce-2fc3-4768-a95f-26fc92073b4f"
+                sourceElement="#7b4ebe45-18c4-4ee3-8031-3e37b389d648"/>
+          </ownedFunctionalExchanges>
+          <ownedFunctionalExchanges xsi:type="org.polarsys.capella.core.data.fa:FunctionalExchange"
+              id="156e6fc3-1903-4ef4-898b-3f5a1b0600f6" name="Car moves" target="#70fa7a41-53af-46a6-bbca-4d0a11b2ec75"
+              source="#a9fcc6d3-dd69-48e2-b364-9241daebfe9e">
+            <ownedFunctionalExchangeRealizations xsi:type="org.polarsys.capella.core.data.fa:FunctionalExchangeRealization"
+                id="3d86cf94-3e18-4f51-932c-95ed0ba8ed01" targetElement="#f04d76bd-48de-481f-95ec-cf329540930d"
+                sourceElement="#156e6fc3-1903-4ef4-898b-3f5a1b0600f6"/>
+          </ownedFunctionalExchanges>
+          <ownedFunctionalExchanges xsi:type="org.polarsys.capella.core.data.fa:FunctionalExchange"
+              id="14d8eec3-70ca-4bc1-9ab8-79e8ba310dcd" name="Cars passing" target="#33d460b6-f6a4-4bb1-86b0-5d6e8fc3d147"
+              source="#1f3d7a68-1064-4874-856a-c9dd530ae6ea">
+            <ownedFunctionalExchangeRealizations xsi:type="org.polarsys.capella.core.data.fa:FunctionalExchangeRealization"
+                id="609a09f7-f482-4659-8cf0-deb72f1483a1" targetElement="#e558b093-1b00-4fed-a46a-a6ababe74a8b"
+                sourceElement="#14d8eec3-70ca-4bc1-9ab8-79e8ba310dcd"/>
+          </ownedFunctionalExchanges>
         </ownedSystemFunctions>
       </ownedFunctionPkg>
       <ownedAbstractCapabilityPkg xsi:type="org.polarsys.capella.core.data.ctx:CapabilityPkg"
-          id="b1d3c569-a1bc-4c17-8490-9355b63975a5" name="Capabilities"/>
+          id="b1d3c569-a1bc-4c17-8490-9355b63975a5" name="Capabilities">
+        <ownedCapabilities xsi:type="org.polarsys.capella.core.data.ctx:Capability"
+            id="04a1133e-713b-4e55-9ffa-ad75c0b51e58" name="Detect queue length">
+          <ownedCapabilityInvolvements xsi:type="org.polarsys.capella.core.data.ctx:CapabilityInvolvement"
+              id="2a2db2bd-7cd9-4bd4-a03f-c40cddc3d837" involved="#b9ac1c49-3499-4c5d-bae1-c00d17e36c62"/>
+        </ownedCapabilities>
+        <ownedCapabilities xsi:type="org.polarsys.capella.core.data.ctx:Capability"
+            id="969bf518-140f-4fe5-a505-bacca185ef6b" name="Control Traffic Light TIme">
+          <ownedCapabilityInvolvements xsi:type="org.polarsys.capella.core.data.ctx:CapabilityInvolvement"
+              id="22ae95de-d745-4d41-ab5c-fb2118cfc97a" involved="#b9ac1c49-3499-4c5d-bae1-c00d17e36c62"/>
+        </ownedCapabilities>
+        <ownedCapabilities xsi:type="org.polarsys.capella.core.data.ctx:Capability"
+            id="fbfd0d29-cfd1-4b25-add2-9f09bf2f327f" name="Reduce wait time">
+          <ownedCapabilityInvolvements xsi:type="org.polarsys.capella.core.data.ctx:CapabilityInvolvement"
+              id="ec5daffa-3e1a-4307-bbc0-759b2cfa38af" involved="#b9ac1c49-3499-4c5d-bae1-c00d17e36c62"/>
+        </ownedCapabilities>
+        <ownedCapabilities xsi:type="org.polarsys.capella.core.data.ctx:Capability"
+            id="28648a6e-00ed-4f9c-b5bf-973ab407be39" name="Improve quality of life">
+          <ownedCapabilityInvolvements xsi:type="org.polarsys.capella.core.data.ctx:CapabilityInvolvement"
+              id="15ee3a1d-9010-4253-930c-e922662661fc" involved="#b9ac1c49-3499-4c5d-bae1-c00d17e36c62"/>
+        </ownedCapabilities>
+      </ownedAbstractCapabilityPkg>
       <ownedInterfacePkg xsi:type="org.polarsys.capella.core.data.cs:InterfacePkg"
           id="09fe18d5-298e-4efe-8eeb-1a3f939c69f3" name="Interfaces"/>
       <ownedDataPkg xsi:type="org.polarsys.capella.core.data.information:DataPkg"
@@ -460,8 +595,23 @@
       </ownedDataPkg>
       <ownedSystemComponentPkg xsi:type="org.polarsys.capella.core.data.ctx:SystemComponentPkg"
           id="7be00762-ab26-4735-94e5-e0f74219a641" name="Structure">
+        <ownedTraces xsi:type="org.polarsys.capella.core.data.capellacommon:TransfoLink"
+            id="df3b08ef-8e6f-44de-b3af-483ccf80ae80" targetElement="#af8d1345-e6aa-47a3-9262-5993cdb67a5c"
+            sourceElement="#52770c6e-fdb5-454b-a791-a4318ddd9e13"/>
+        <ownedTraces xsi:type="org.polarsys.capella.core.data.capellacommon:TransfoLink"
+            id="24664213-c4e5-4292-aa80-3a2114bcbf45" targetElement="#623e0a8c-af6a-40ca-96a1-e78d4bd9bc0a"
+            sourceElement="#ef907807-8506-4cca-9a7f-db88c72da755"/>
+        <ownedTraces xsi:type="org.polarsys.capella.core.data.capellacommon:TransfoLink"
+            id="12901c2e-1b97-4715-aaa6-691a8ad04ca9" targetElement="#12e5f999-b578-4a4c-8a2f-083597c7c468"
+            sourceElement="#65af26ff-cf29-40f0-8518-e4dd20137549"/>
         <ownedParts xsi:type="org.polarsys.capella.core.data.cs:Part" id="62b33f19-12ac-4184-a202-fce68e9d313b"
             name="System" abstractType="#b9ac1c49-3499-4c5d-bae1-c00d17e36c62"/>
+        <ownedParts xsi:type="org.polarsys.capella.core.data.cs:Part" id="52770c6e-fdb5-454b-a791-a4318ddd9e13"
+            name="Car" abstractType="#1e04cb83-4cbb-47f6-abcf-52a994a6db47"/>
+        <ownedParts xsi:type="org.polarsys.capella.core.data.cs:Part" id="ef907807-8506-4cca-9a7f-db88c72da755"
+            name="Traffic Light Control" abstractType="#65f1c61d-5745-40b7-926a-63a15f081fa8"/>
+        <ownedParts xsi:type="org.polarsys.capella.core.data.cs:Part" id="65af26ff-cf29-40f0-8518-e4dd20137549"
+            name="Sensor" abstractType="#418a1df4-b56a-4d6e-bd30-c4d6366db639"/>
         <ownedSystemComponents xsi:type="org.polarsys.capella.core.data.ctx:SystemComponent"
             id="b9ac1c49-3499-4c5d-bae1-c00d17e36c62" name="System">
           <ownedStateMachines xsi:type="org.polarsys.capella.core.data.capellacommon:StateMachine"
@@ -470,9 +620,99 @@
                 id="578720e1-c71c-4013-86f6-ff127e47a148" name="Default Region"/>
           </ownedStateMachines>
         </ownedSystemComponents>
+        <ownedSystemComponents xsi:type="org.polarsys.capella.core.data.ctx:SystemComponent"
+            id="1e04cb83-4cbb-47f6-abcf-52a994a6db47" name="Car" actor="true">
+          <ownedTraces xsi:type="org.polarsys.capella.core.data.capellacommon:TransfoLink"
+              id="5aaa4e1b-f900-4d9e-a511-6f9814f2cd45" targetElement="#21ab2fd6-b019-4fe1-9098-5f6fd7621f6d"
+              sourceElement="#a26593ca-39e7-4e48-a719-637592f7dcc5"/>
+          <ownedTraces xsi:type="org.polarsys.capella.core.data.capellacommon:TransfoLink"
+              id="405dd339-23ca-428b-9320-83d90a52a792" targetElement="#8f3f7e3f-2811-4a9b-9dbb-c8a719dd308c"
+              sourceElement="#34dde9f4-6c45-451b-93da-56a83c75120a"/>
+          <ownedFunctionalAllocation xsi:type="org.polarsys.capella.core.data.fa:ComponentFunctionalAllocation"
+              id="a26593ca-39e7-4e48-a719-637592f7dcc5" targetElement="#fe5b6786-2d57-4a6d-98e0-6906c05920d8"
+              sourceElement="#1e04cb83-4cbb-47f6-abcf-52a994a6db47"/>
+          <ownedFunctionalAllocation xsi:type="org.polarsys.capella.core.data.fa:ComponentFunctionalAllocation"
+              id="34dde9f4-6c45-451b-93da-56a83c75120a" targetElement="#462a9086-a15b-42a2-94f2-c76ca1b29b89"
+              sourceElement="#1e04cb83-4cbb-47f6-abcf-52a994a6db47"/>
+          <ownedComponentRealizations xsi:type="org.polarsys.capella.core.data.cs:ComponentRealization"
+              id="d67c2bd0-ea44-4689-82d7-57412fc68834" targetElement="#5e48fc34-b215-4d03-92dc-d97076837525"
+              sourceElement="#1e04cb83-4cbb-47f6-abcf-52a994a6db47"/>
+        </ownedSystemComponents>
+        <ownedSystemComponents xsi:type="org.polarsys.capella.core.data.ctx:SystemComponent"
+            id="65f1c61d-5745-40b7-926a-63a15f081fa8" name="Traffic Light Control"
+            actor="true">
+          <ownedTraces xsi:type="org.polarsys.capella.core.data.capellacommon:TransfoLink"
+              id="d5af3ccb-d365-4c05-948b-b0bcd3d8a135" targetElement="#7dde2cc6-1344-4f8d-aeca-54c39c067516"
+              sourceElement="#bedef98d-9a3a-4584-9477-29e25c4c1ca3"/>
+          <ownedTraces xsi:type="org.polarsys.capella.core.data.capellacommon:TransfoLink"
+              id="6f586e22-d9a5-4f18-a05a-6224bf57850e" targetElement="#c0e14740-b1dd-426d-8b6c-9844f3a9e058"
+              sourceElement="#5298e6d6-e0d9-4eca-aa59-4ae23080dbdb"/>
+          <ownedFunctionalAllocation xsi:type="org.polarsys.capella.core.data.fa:ComponentFunctionalAllocation"
+              id="bedef98d-9a3a-4584-9477-29e25c4c1ca3" targetElement="#3d054259-4a43-46d9-97ac-c28d0f8752dc"
+              sourceElement="#65f1c61d-5745-40b7-926a-63a15f081fa8"/>
+          <ownedFunctionalAllocation xsi:type="org.polarsys.capella.core.data.fa:ComponentFunctionalAllocation"
+              id="5298e6d6-e0d9-4eca-aa59-4ae23080dbdb" targetElement="#611faec4-5058-49e0-be9e-4e6c86f43c94"
+              sourceElement="#65f1c61d-5745-40b7-926a-63a15f081fa8"/>
+          <ownedFunctionalAllocation xsi:type="org.polarsys.capella.core.data.fa:ComponentFunctionalAllocation"
+              id="05ffc9ac-f253-4a27-a332-0d26a0649421" targetElement="#149138c6-aaf7-4408-9d6f-ebc6c4adce6e"
+              sourceElement="#65f1c61d-5745-40b7-926a-63a15f081fa8"/>
+          <ownedComponentRealizations xsi:type="org.polarsys.capella.core.data.cs:ComponentRealization"
+              id="2551544c-3a79-478a-a06f-7cd5d426f8b8" targetElement="#54042d07-85e7-4b2a-9d4c-1930c5f2566d"
+              sourceElement="#65f1c61d-5745-40b7-926a-63a15f081fa8"/>
+        </ownedSystemComponents>
+        <ownedSystemComponents xsi:type="org.polarsys.capella.core.data.ctx:SystemComponent"
+            id="418a1df4-b56a-4d6e-bd30-c4d6366db639" name="Sensor" actor="true">
+          <ownedTraces xsi:type="org.polarsys.capella.core.data.capellacommon:TransfoLink"
+              id="cf034e0c-2c0e-4c6f-9832-d6fa311c2d3e" targetElement="#33654061-21b7-4a8f-bbc9-b5ee4abef390"
+              sourceElement="#834ed169-e3a0-4689-8a14-2778f9b462b9"/>
+          <ownedTraces xsi:type="org.polarsys.capella.core.data.capellacommon:TransfoLink"
+              id="c57766b6-67ca-44e8-a13f-c189da4d6bd3" targetElement="#e42e1c61-9e50-463d-acba-9f6d82b2de43"
+              sourceElement="#32d21cde-58cb-4d8d-a811-fa0f539677bf"/>
+          <ownedTraces xsi:type="org.polarsys.capella.core.data.capellacommon:TransfoLink"
+              id="ee36cb2a-f6de-4220-a484-15ec99f09c97" targetElement="#01df0107-2d9a-4ffa-b90b-d07f1b5377ae"
+              sourceElement="#05ffc9ac-f253-4a27-a332-0d26a0649421"/>
+          <ownedFunctionalAllocation xsi:type="org.polarsys.capella.core.data.fa:ComponentFunctionalAllocation"
+              id="834ed169-e3a0-4689-8a14-2778f9b462b9" targetElement="#fbddf649-fd9b-46ff-8fe9-b535005f531e"
+              sourceElement="#418a1df4-b56a-4d6e-bd30-c4d6366db639"/>
+          <ownedFunctionalAllocation xsi:type="org.polarsys.capella.core.data.fa:ComponentFunctionalAllocation"
+              id="32d21cde-58cb-4d8d-a811-fa0f539677bf" targetElement="#2735238e-cdaa-4775-811a-86a318058351"
+              sourceElement="#418a1df4-b56a-4d6e-bd30-c4d6366db639"/>
+          <ownedComponentRealizations xsi:type="org.polarsys.capella.core.data.cs:ComponentRealization"
+              id="1cb9234e-b3f5-4710-914b-0942e1acb14e" targetElement="#74131e99-ac4c-4ecb-9b70-e760d42a34b3"
+              sourceElement="#418a1df4-b56a-4d6e-bd30-c4d6366db639"/>
+        </ownedSystemComponents>
       </ownedSystemComponentPkg>
       <ownedMissionPkg xsi:type="org.polarsys.capella.core.data.ctx:MissionPkg" id="2c4720b4-0e43-4eae-bc13-cd38234fa536"
-          name="Missions"/>
+          name="Missions">
+        <ownedTraces xsi:type="org.polarsys.capella.core.data.capellacommon:TransfoLink"
+            id="7b5fa896-dd05-454e-88bc-1df766d0c866" targetElement="#d41893c8-771c-4d3b-8f77-2b1b28e75b3a"
+            sourceElement="#eddcb4e0-979d-46ae-997b-e575c44b5454"/>
+        <ownedTraces xsi:type="org.polarsys.capella.core.data.capellacommon:TransfoLink"
+            id="eae40755-0712-45f3-914c-634e63037dae" targetElement="#d436bd54-e29a-462c-a047-0caeb300a4bf"
+            sourceElement="#eaa369c2-7dc6-43e0-a9a0-b91a4040f452"/>
+        <ownedMissions xsi:type="org.polarsys.capella.core.data.ctx:Mission" id="eddcb4e0-979d-46ae-997b-e575c44b5454"
+            name="Control Traffic Lights">
+          <ownedMissionInvolvements xsi:type="org.polarsys.capella.core.data.ctx:MissionInvolvement"
+              id="d9fc4fb5-945a-43d5-a422-69ef7aebed00" involved="#1e04cb83-4cbb-47f6-abcf-52a994a6db47"/>
+          <ownedMissionInvolvements xsi:type="org.polarsys.capella.core.data.ctx:MissionInvolvement"
+              id="99b8e9fa-f66a-478e-b6cd-1a7c719bbfe2" involved="#65f1c61d-5745-40b7-926a-63a15f081fa8"/>
+          <ownedMissionInvolvements xsi:type="org.polarsys.capella.core.data.ctx:MissionInvolvement"
+              id="d20cd2aa-8c37-4296-87aa-835a3c8dff80" involved="#418a1df4-b56a-4d6e-bd30-c4d6366db639"/>
+          <ownedCapabilityExploitations xsi:type="org.polarsys.capella.core.data.ctx:CapabilityExploitation"
+              id="81b7d5b7-ea57-45fc-9942-fdbc3073d50e" capability="#969bf518-140f-4fe5-a505-bacca185ef6b"/>
+          <ownedCapabilityExploitations xsi:type="org.polarsys.capella.core.data.ctx:CapabilityExploitation"
+              id="336d761a-db27-4d99-a7cd-0dd0ea4ed26b" capability="#fbfd0d29-cfd1-4b25-add2-9f09bf2f327f"/>
+          <ownedCapabilityExploitations xsi:type="org.polarsys.capella.core.data.ctx:CapabilityExploitation"
+              id="fbc3cc2b-ce75-43e0-a17a-29a091a39f1a" capability="#28648a6e-00ed-4f9c-b5bf-973ab407be39"/>
+        </ownedMissions>
+        <ownedMissions xsi:type="org.polarsys.capella.core.data.ctx:Mission" id="eaa369c2-7dc6-43e0-a9a0-b91a4040f452"
+            name="Detect presence  and queue lenght">
+          <ownedMissionInvolvements xsi:type="org.polarsys.capella.core.data.ctx:MissionInvolvement"
+              id="f3aff5cd-f5b2-4125-bef4-de4af289d8c5" involved="#418a1df4-b56a-4d6e-bd30-c4d6366db639"/>
+          <ownedCapabilityExploitations xsi:type="org.polarsys.capella.core.data.ctx:CapabilityExploitation"
+              id="3606d99e-eb14-4281-8fe6-128852cb233e" capability="#04a1133e-713b-4e55-9ffa-ad75c0b51e58"/>
+        </ownedMissions>
+      </ownedMissionPkg>
       <ownedOperationalAnalysisRealizations xsi:type="org.polarsys.capella.core.data.ctx:OperationalAnalysisRealization"
           id="8b96c00a-c671-47c2-beb7-78c8aa9f494d" targetElement="#7b166dc2-9be1-40b9-8aa5-5903d93fa174"
           sourceElement="#33f32a65-c66a-4848-9dcb-16ce44f66b37"/>
@@ -483,26 +723,303 @@
           id="3cfe1a21-a674-4462-b0d5-2874eaf9d994" name="Logical Functions">
         <ownedLogicalFunctions xsi:type="org.polarsys.capella.core.data.la:LogicalFunction"
             id="e6585fd0-ac8f-4865-b90f-0e0dda3d516c" name="Root Logical Function">
+          <ownedFunctions xsi:type="org.polarsys.capella.core.data.la:LogicalFunction"
+              id="f824a579-895e-487e-baee-c9770a7d01c0" name="Wait For Traffic Light">
+            <inputs xsi:type="org.polarsys.capella.core.data.fa:FunctionInputPort"
+                id="d388193b-0046-42c7-a604-ac240ac91f57" name="inCar waits ">
+              <ownedPortRealizations xsi:type="org.polarsys.capella.core.data.information:PortRealization"
+                  id="dc408d9e-80f3-4478-a10a-b848fb31f5da" targetElement="#ddf2b838-79ee-406e-a98a-c869a951b675"
+                  sourceElement="#d388193b-0046-42c7-a604-ac240ac91f57"/>
+            </inputs>
+            <outputs xsi:type="org.polarsys.capella.core.data.fa:FunctionOutputPort"
+                id="e11e9bc5-d88a-461a-b403-b136706e9551" name="outSensor Detects that the car is stopped">
+              <ownedPortRealizations xsi:type="org.polarsys.capella.core.data.information:PortRealization"
+                  id="d31955fd-4394-47e7-ae93-f6e88443c372" targetElement="#219c8a12-1c38-4add-935f-cef6b4abbd06"
+                  sourceElement="#e11e9bc5-d88a-461a-b403-b136706e9551"/>
+            </outputs>
+            <ownedFunctionRealizations xsi:type="org.polarsys.capella.core.data.fa:FunctionRealization"
+                id="778c0133-c5a6-4c9f-94ea-b04db6ef70a2" targetElement="#fe5b6786-2d57-4a6d-98e0-6906c05920d8"
+                sourceElement="#f824a579-895e-487e-baee-c9770a7d01c0"/>
+          </ownedFunctions>
+          <ownedFunctions xsi:type="org.polarsys.capella.core.data.la:LogicalFunction"
+              id="254fa3af-c3fc-44f4-9acd-b3b45834c7b2" name="Turn on green lights">
+            <inputs xsi:type="org.polarsys.capella.core.data.fa:FunctionInputPort"
+                id="ba7805be-eb77-46e4-95a0-5d56675eae4b" name="inTurn traffic lights to green">
+              <ownedPortRealizations xsi:type="org.polarsys.capella.core.data.information:PortRealization"
+                  id="98e09631-da0e-4baf-9f1d-3afe9b91564f" targetElement="#9d50bda5-b8da-4a2d-b6f5-66684d69c298"
+                  sourceElement="#ba7805be-eb77-46e4-95a0-5d56675eae4b"/>
+            </inputs>
+            <outputs xsi:type="org.polarsys.capella.core.data.fa:FunctionOutputPort"
+                id="2d05e665-389f-42cf-8869-969e4816daa5" name="outCar moves">
+              <ownedPortRealizations xsi:type="org.polarsys.capella.core.data.information:PortRealization"
+                  id="a1a18611-cf59-42d1-9a70-41ee90cce7da" targetElement="#a9fcc6d3-dd69-48e2-b364-9241daebfe9e"
+                  sourceElement="#2d05e665-389f-42cf-8869-969e4816daa5"/>
+            </outputs>
+            <ownedFunctionRealizations xsi:type="org.polarsys.capella.core.data.fa:FunctionRealization"
+                id="8ea54778-2449-45b4-85ff-9bccae0e0516" targetElement="#3d054259-4a43-46d9-97ac-c28d0f8752dc"
+                sourceElement="#254fa3af-c3fc-44f4-9acd-b3b45834c7b2"/>
+          </ownedFunctions>
+          <ownedFunctions xsi:type="org.polarsys.capella.core.data.la:LogicalFunction"
+              id="c0c8396f-9463-42df-8aa1-b2febc1dd40c" name="Detect a Stopped Car">
+            <inputs xsi:type="org.polarsys.capella.core.data.fa:FunctionInputPort"
+                id="218676d4-2ade-41c7-8ac1-9158f07c8d0c" name="inSensor Detects that the car is stopped">
+              <ownedPortRealizations xsi:type="org.polarsys.capella.core.data.information:PortRealization"
+                  id="a936b35b-c53f-4a82-9fdd-f495996ca1ff" targetElement="#a6f855df-13bb-41d6-b998-a52e1a0cc129"
+                  sourceElement="#218676d4-2ade-41c7-8ac1-9158f07c8d0c"/>
+            </inputs>
+            <outputs xsi:type="org.polarsys.capella.core.data.fa:FunctionOutputPort"
+                id="9718922b-5ec7-4d07-b567-1d2ac115f5a6" name="outDetect if there is no traffic in the intersection lane">
+              <ownedPortRealizations xsi:type="org.polarsys.capella.core.data.information:PortRealization"
+                  id="97e6de51-1d76-4b0c-b3b1-ba24f4c08fef" targetElement="#23e551a9-c33b-4d94-af9a-048a6f0177e6"
+                  sourceElement="#9718922b-5ec7-4d07-b567-1d2ac115f5a6"/>
+            </outputs>
+            <ownedFunctionRealizations xsi:type="org.polarsys.capella.core.data.fa:FunctionRealization"
+                id="1aa0bbe8-27f5-4123-a3c5-0b8c9335f033" targetElement="#fbddf649-fd9b-46ff-8fe9-b535005f531e"
+                sourceElement="#c0c8396f-9463-42df-8aa1-b2febc1dd40c"/>
+          </ownedFunctions>
+          <ownedFunctions xsi:type="org.polarsys.capella.core.data.la:LogicalFunction"
+              id="80afa948-047d-4fed-978c-100787d69281" name="Turn off green lights">
+            <outputs xsi:type="org.polarsys.capella.core.data.fa:FunctionOutputPort"
+                id="257cb66d-4bf2-44bf-ad12-1c80e52aa879" name="outCar waits ">
+              <ownedPortRealizations xsi:type="org.polarsys.capella.core.data.information:PortRealization"
+                  id="e0d71201-46b3-4357-a65d-9204e73e8bbc" targetElement="#1e4141e6-d4ec-4a27-8bd9-debf0175c9f2"
+                  sourceElement="#257cb66d-4bf2-44bf-ad12-1c80e52aa879"/>
+            </outputs>
+            <ownedFunctionRealizations xsi:type="org.polarsys.capella.core.data.fa:FunctionRealization"
+                id="b6bd76ce-50c0-4417-bdca-10385b42f0e5" targetElement="#611faec4-5058-49e0-be9e-4e6c86f43c94"
+                sourceElement="#80afa948-047d-4fed-978c-100787d69281"/>
+          </ownedFunctions>
+          <ownedFunctions xsi:type="org.polarsys.capella.core.data.la:LogicalFunction"
+              id="66ff6bfd-fb51-4a86-9d5d-bdb4e4c53b0d" name="Move">
+            <inputs xsi:type="org.polarsys.capella.core.data.fa:FunctionInputPort"
+                id="1f001c19-7b88-487c-a6ce-2291bcc343da" name="inCar moves">
+              <ownedPortRealizations xsi:type="org.polarsys.capella.core.data.information:PortRealization"
+                  id="5a49ab50-d838-4f67-bfc7-5d2332d4c7a7" targetElement="#70fa7a41-53af-46a6-bbca-4d0a11b2ec75"
+                  sourceElement="#1f001c19-7b88-487c-a6ce-2291bcc343da"/>
+            </inputs>
+            <outputs xsi:type="org.polarsys.capella.core.data.fa:FunctionOutputPort"
+                id="e30e7b8c-f3b1-4b5a-9cde-6af6bafccc58" name="outCars passing">
+              <ownedPortRealizations xsi:type="org.polarsys.capella.core.data.information:PortRealization"
+                  id="0ef81c94-5221-4b10-9ac5-7e75e6627634" targetElement="#1f3d7a68-1064-4874-856a-c9dd530ae6ea"
+                  sourceElement="#e30e7b8c-f3b1-4b5a-9cde-6af6bafccc58"/>
+            </outputs>
+            <ownedFunctionRealizations xsi:type="org.polarsys.capella.core.data.fa:FunctionRealization"
+                id="9407f784-080e-4704-a2d9-9630e3d2486e" targetElement="#462a9086-a15b-42a2-94f2-c76ca1b29b89"
+                sourceElement="#66ff6bfd-fb51-4a86-9d5d-bdb4e4c53b0d"/>
+          </ownedFunctions>
+          <ownedFunctions xsi:type="org.polarsys.capella.core.data.la:LogicalFunction"
+              id="81e6e3a8-c604-45a0-b15a-862ca29680b4" name="Detect a free intersection lane (left/right)">
+            <inputs xsi:type="org.polarsys.capella.core.data.fa:FunctionInputPort"
+                id="7cc669d8-6bae-404b-a8cf-9b3f090ea8c7" name="inDetect if there is no traffic in the intersection lane">
+              <ownedPortRealizations xsi:type="org.polarsys.capella.core.data.information:PortRealization"
+                  id="2b8e03e2-340e-467c-aadc-8668c8aa2583" targetElement="#7845c1ff-a5c8-47d1-97ec-38bb1b9f7685"
+                  sourceElement="#7cc669d8-6bae-404b-a8cf-9b3f090ea8c7"/>
+            </inputs>
+            <outputs xsi:type="org.polarsys.capella.core.data.fa:FunctionOutputPort"
+                id="0803861b-7f34-4b41-a580-92cda237d840" name="outTurn traffic lights to green">
+              <ownedPortRealizations xsi:type="org.polarsys.capella.core.data.information:PortRealization"
+                  id="9377c8ba-2203-4b51-85f2-d6b3cd8f9a99" targetElement="#9f7437f2-2465-4682-b70d-1bc0158d4840"
+                  sourceElement="#0803861b-7f34-4b41-a580-92cda237d840"/>
+            </outputs>
+            <ownedFunctionRealizations xsi:type="org.polarsys.capella.core.data.fa:FunctionRealization"
+                id="4ae7bdf0-fb7e-4c95-9631-4f1163c490cc" targetElement="#2735238e-cdaa-4775-811a-86a318058351"
+                sourceElement="#81e6e3a8-c604-45a0-b15a-862ca29680b4"/>
+          </ownedFunctions>
+          <ownedFunctions xsi:type="org.polarsys.capella.core.data.la:LogicalFunction"
+              id="16bc65a2-658d-4b51-ad1a-41e5c403e63f" name="Detect no cars in lane">
+            <inputs xsi:type="org.polarsys.capella.core.data.fa:FunctionInputPort"
+                id="cdd3f247-4397-4566-8008-18a83c566b5a" name="inCars passing">
+              <ownedPortRealizations xsi:type="org.polarsys.capella.core.data.information:PortRealization"
+                  id="4d975ab5-f4a5-4dd4-ac08-6f8114299d0a" targetElement="#33d460b6-f6a4-4bb1-86b0-5d6e8fc3d147"
+                  sourceElement="#cdd3f247-4397-4566-8008-18a83c566b5a"/>
+            </inputs>
+            <ownedFunctionRealizations xsi:type="org.polarsys.capella.core.data.fa:FunctionRealization"
+                id="9c380ae0-5be3-44a0-bd13-e82da68f9356" targetElement="#149138c6-aaf7-4408-9d6f-ebc6c4adce6e"
+                sourceElement="#16bc65a2-658d-4b51-ad1a-41e5c403e63f"/>
+          </ownedFunctions>
           <ownedFunctionRealizations xsi:type="org.polarsys.capella.core.data.fa:FunctionRealization"
               id="13304e20-3f68-4303-83ae-6a2a066fd33e" targetElement="#686f4be4-04f1-44e0-907a-01eed1d74e80"
               sourceElement="#e6585fd0-ac8f-4865-b90f-0e0dda3d516c"/>
+          <ownedFunctionalExchanges xsi:type="org.polarsys.capella.core.data.fa:FunctionalExchange"
+              id="0dceaea2-d57e-4a4f-abcb-cfdb58ef001d" name="Car waits " target="#d388193b-0046-42c7-a604-ac240ac91f57"
+              source="#257cb66d-4bf2-44bf-ad12-1c80e52aa879">
+            <ownedFunctionalExchangeRealizations xsi:type="org.polarsys.capella.core.data.fa:FunctionalExchangeRealization"
+                id="a43683ae-cd8f-40e2-9c45-d965c9567f30" targetElement="#2bea94b8-d7e2-4c8c-995d-127a11f69c7a"
+                sourceElement="#0dceaea2-d57e-4a4f-abcb-cfdb58ef001d"/>
+          </ownedFunctionalExchanges>
+          <ownedFunctionalExchanges xsi:type="org.polarsys.capella.core.data.fa:FunctionalExchange"
+              id="4212e636-671a-4cbc-86a6-8f33dd9ee96a" name="Sensor Detects that the car is stopped"
+              target="#218676d4-2ade-41c7-8ac1-9158f07c8d0c" source="#e11e9bc5-d88a-461a-b403-b136706e9551">
+            <ownedFunctionalExchangeRealizations xsi:type="org.polarsys.capella.core.data.fa:FunctionalExchangeRealization"
+                id="0a70cd32-e86f-48f0-89b7-cfbeecea3d46" targetElement="#bca4cf54-d7d4-4a3e-8ce0-705e95b05f9b"
+                sourceElement="#4212e636-671a-4cbc-86a6-8f33dd9ee96a"/>
+          </ownedFunctionalExchanges>
+          <ownedFunctionalExchanges xsi:type="org.polarsys.capella.core.data.fa:FunctionalExchange"
+              id="6c713858-fb59-4c58-b307-ebdd9f01aaa8" name="Detect if there is no traffic in the intersection lane"
+              target="#7cc669d8-6bae-404b-a8cf-9b3f090ea8c7" source="#9718922b-5ec7-4d07-b567-1d2ac115f5a6">
+            <ownedFunctionalExchangeRealizations xsi:type="org.polarsys.capella.core.data.fa:FunctionalExchangeRealization"
+                id="85780d00-1981-42b1-b34a-2d1c88dd4c2f" targetElement="#163422ac-e014-47f2-a589-9e5a347a71cd"
+                sourceElement="#6c713858-fb59-4c58-b307-ebdd9f01aaa8"/>
+          </ownedFunctionalExchanges>
+          <ownedFunctionalExchanges xsi:type="org.polarsys.capella.core.data.fa:FunctionalExchange"
+              id="2328dca0-bf21-4977-a46e-1a86dcc07f43" name="Turn traffic lights to green"
+              target="#ba7805be-eb77-46e4-95a0-5d56675eae4b" source="#0803861b-7f34-4b41-a580-92cda237d840">
+            <ownedFunctionalExchangeRealizations xsi:type="org.polarsys.capella.core.data.fa:FunctionalExchangeRealization"
+                id="1ca7a0c1-c961-4c00-8b8c-994cf09b41ad" targetElement="#7b4ebe45-18c4-4ee3-8031-3e37b389d648"
+                sourceElement="#2328dca0-bf21-4977-a46e-1a86dcc07f43"/>
+          </ownedFunctionalExchanges>
+          <ownedFunctionalExchanges xsi:type="org.polarsys.capella.core.data.fa:FunctionalExchange"
+              id="a008c9a8-90f0-4bd5-a290-1c21de8d928d" name="Car moves" target="#1f001c19-7b88-487c-a6ce-2291bcc343da"
+              source="#2d05e665-389f-42cf-8869-969e4816daa5">
+            <ownedFunctionalExchangeRealizations xsi:type="org.polarsys.capella.core.data.fa:FunctionalExchangeRealization"
+                id="22ea628b-00c8-48cb-b49d-811e83b12b2d" targetElement="#156e6fc3-1903-4ef4-898b-3f5a1b0600f6"
+                sourceElement="#a008c9a8-90f0-4bd5-a290-1c21de8d928d"/>
+          </ownedFunctionalExchanges>
+          <ownedFunctionalExchanges xsi:type="org.polarsys.capella.core.data.fa:FunctionalExchange"
+              id="349a9949-a5e8-44ec-be41-cfbe612c1199" name="Cars passing" target="#cdd3f247-4397-4566-8008-18a83c566b5a"
+              source="#e30e7b8c-f3b1-4b5a-9cde-6af6bafccc58">
+            <ownedFunctionalExchangeRealizations xsi:type="org.polarsys.capella.core.data.fa:FunctionalExchangeRealization"
+                id="f954d77a-f45b-461b-a3cd-dc7ceba2ec4f" targetElement="#14d8eec3-70ca-4bc1-9ab8-79e8ba310dcd"
+                sourceElement="#349a9949-a5e8-44ec-be41-cfbe612c1199"/>
+          </ownedFunctionalExchanges>
         </ownedLogicalFunctions>
       </ownedFunctionPkg>
       <ownedAbstractCapabilityPkg xsi:type="org.polarsys.capella.core.data.la:CapabilityRealizationPkg"
-          id="af59fe3b-c0aa-4a50-8f77-65b8bcd46c51" name="Capabilities"/>
+          id="af59fe3b-c0aa-4a50-8f77-65b8bcd46c51" name="Capabilities">
+        <ownedCapabilityRealizations xsi:type="org.polarsys.capella.core.data.la:CapabilityRealization"
+            id="bddb964f-76f3-4402-9d6c-b82146f926ac" name="Detect queue length">
+          <ownedTraces xsi:type="org.polarsys.capella.core.data.capellacommon:TransfoLink"
+              id="51c78cb4-90e5-4f31-b592-878c2c72e8b8" targetElement="#2a2db2bd-7cd9-4bd4-a03f-c40cddc3d837"
+              sourceElement="#9fcdaa6b-3f5f-4448-b647-ce4315fe9d8a"/>
+          <ownedAbstractCapabilityRealizations xsi:type="org.polarsys.capella.core.data.interaction:AbstractCapabilityRealization"
+              id="bcc7ef75-bf12-41d7-90aa-302f03cff3d9" targetElement="#04a1133e-713b-4e55-9ffa-ad75c0b51e58"
+              sourceElement="#bddb964f-76f3-4402-9d6c-b82146f926ac"/>
+          <ownedCapabilityRealizationInvolvements xsi:type="org.polarsys.capella.core.data.capellacommon:CapabilityRealizationInvolvement"
+              id="9fcdaa6b-3f5f-4448-b647-ce4315fe9d8a" involved="#68e997f0-34f1-4d82-bc8a-1e1d905d9721"/>
+        </ownedCapabilityRealizations>
+        <ownedCapabilityRealizations xsi:type="org.polarsys.capella.core.data.la:CapabilityRealization"
+            id="b9150918-d0de-4579-b91a-ff74fff97b89" name="Control Traffic Light TIme">
+          <ownedTraces xsi:type="org.polarsys.capella.core.data.capellacommon:TransfoLink"
+              id="b5fff10e-75f3-40ce-99e7-77254055dc47" targetElement="#22ae95de-d745-4d41-ab5c-fb2118cfc97a"
+              sourceElement="#34bffbc8-8eed-4fae-afe3-c8dc93e12caf"/>
+          <ownedAbstractCapabilityRealizations xsi:type="org.polarsys.capella.core.data.interaction:AbstractCapabilityRealization"
+              id="404658a4-0a99-4bd6-a7cf-c3f57902baef" targetElement="#969bf518-140f-4fe5-a505-bacca185ef6b"
+              sourceElement="#b9150918-d0de-4579-b91a-ff74fff97b89"/>
+          <ownedCapabilityRealizationInvolvements xsi:type="org.polarsys.capella.core.data.capellacommon:CapabilityRealizationInvolvement"
+              id="34bffbc8-8eed-4fae-afe3-c8dc93e12caf" involved="#68e997f0-34f1-4d82-bc8a-1e1d905d9721"/>
+        </ownedCapabilityRealizations>
+        <ownedCapabilityRealizations xsi:type="org.polarsys.capella.core.data.la:CapabilityRealization"
+            id="831ce9c4-d585-4916-9d70-f30b3c28aec3" name="Reduce wait time">
+          <ownedTraces xsi:type="org.polarsys.capella.core.data.capellacommon:TransfoLink"
+              id="f5906b53-9438-4b09-a211-804aea341e61" targetElement="#ec5daffa-3e1a-4307-bbc0-759b2cfa38af"
+              sourceElement="#c91f4f3b-8cd1-4ddf-a092-04173d5c52f4"/>
+          <ownedAbstractCapabilityRealizations xsi:type="org.polarsys.capella.core.data.interaction:AbstractCapabilityRealization"
+              id="aadb764d-f3de-4c15-9989-a744949f423b" targetElement="#fbfd0d29-cfd1-4b25-add2-9f09bf2f327f"
+              sourceElement="#831ce9c4-d585-4916-9d70-f30b3c28aec3"/>
+          <ownedCapabilityRealizationInvolvements xsi:type="org.polarsys.capella.core.data.capellacommon:CapabilityRealizationInvolvement"
+              id="c91f4f3b-8cd1-4ddf-a092-04173d5c52f4" involved="#68e997f0-34f1-4d82-bc8a-1e1d905d9721"/>
+        </ownedCapabilityRealizations>
+        <ownedCapabilityRealizations xsi:type="org.polarsys.capella.core.data.la:CapabilityRealization"
+            id="3f919702-9433-45c6-8ed8-fd65ee07356e" name="Improve quality of life">
+          <ownedTraces xsi:type="org.polarsys.capella.core.data.capellacommon:TransfoLink"
+              id="6b69e0fd-a3f7-40b6-b97c-aed9d9648d5c" targetElement="#15ee3a1d-9010-4253-930c-e922662661fc"
+              sourceElement="#f2526ec1-46f6-4a94-aa78-0e8576146535"/>
+          <ownedAbstractCapabilityRealizations xsi:type="org.polarsys.capella.core.data.interaction:AbstractCapabilityRealization"
+              id="f38d6763-2bfd-4ce7-a47e-b853f68be560" targetElement="#28648a6e-00ed-4f9c-b5bf-973ab407be39"
+              sourceElement="#3f919702-9433-45c6-8ed8-fd65ee07356e"/>
+          <ownedCapabilityRealizationInvolvements xsi:type="org.polarsys.capella.core.data.capellacommon:CapabilityRealizationInvolvement"
+              id="f2526ec1-46f6-4a94-aa78-0e8576146535" involved="#68e997f0-34f1-4d82-bc8a-1e1d905d9721"/>
+        </ownedCapabilityRealizations>
+      </ownedAbstractCapabilityPkg>
       <ownedInterfacePkg xsi:type="org.polarsys.capella.core.data.cs:InterfacePkg"
           id="71f4ce61-8e2f-4fcd-a079-ffe751b3f2d6" name="Interfaces"/>
       <ownedDataPkg xsi:type="org.polarsys.capella.core.data.information:DataPkg"
           id="714eb04a-dad2-49fa-b6b8-8fc53fdd8f90" name="Data"/>
       <ownedLogicalComponentPkg xsi:type="org.polarsys.capella.core.data.la:LogicalComponentPkg"
           id="466da45f-75c1-497d-9281-81ca3cd05b2e" name="Structure">
+        <ownedTraces xsi:type="org.polarsys.capella.core.data.capellacommon:TransfoLink"
+            id="03f43f59-65b0-4d76-9627-11775fb7b126" targetElement="#52770c6e-fdb5-454b-a791-a4318ddd9e13"
+            sourceElement="#98e8f3c6-d43d-43fc-bce4-2d3bdfaf3a8e"/>
+        <ownedTraces xsi:type="org.polarsys.capella.core.data.capellacommon:TransfoLink"
+            id="91128887-5083-40bc-9930-82355ba23109" targetElement="#ef907807-8506-4cca-9a7f-db88c72da755"
+            sourceElement="#a98b048c-1b87-4a15-9b2f-735bb46f1765"/>
+        <ownedTraces xsi:type="org.polarsys.capella.core.data.capellacommon:TransfoLink"
+            id="85f500eb-707b-45d9-b519-4e152212791f" targetElement="#65af26ff-cf29-40f0-8518-e4dd20137549"
+            sourceElement="#0cbb0615-2762-418a-bae5-28ef50400bf2"/>
         <ownedParts xsi:type="org.polarsys.capella.core.data.cs:Part" id="df69ea1b-4d09-4958-833b-06372d3185ea"
             name="Logical System" abstractType="#68e997f0-34f1-4d82-bc8a-1e1d905d9721"/>
+        <ownedParts xsi:type="org.polarsys.capella.core.data.cs:Part" id="98e8f3c6-d43d-43fc-bce4-2d3bdfaf3a8e"
+            name="Car" abstractType="#8588fe27-3554-43fb-9279-c335600a9988"/>
+        <ownedParts xsi:type="org.polarsys.capella.core.data.cs:Part" id="a98b048c-1b87-4a15-9b2f-735bb46f1765"
+            name="Traffic Light Control" abstractType="#331f3f76-6478-4c12-aa99-7f5d632e4348"/>
+        <ownedParts xsi:type="org.polarsys.capella.core.data.cs:Part" id="0cbb0615-2762-418a-bae5-28ef50400bf2"
+            name="Sensor" abstractType="#e9fa24aa-94ee-46d7-9937-5b9cc185bd53"/>
         <ownedLogicalComponents xsi:type="org.polarsys.capella.core.data.la:LogicalComponent"
             id="68e997f0-34f1-4d82-bc8a-1e1d905d9721" name="Logical System">
           <ownedComponentRealizations xsi:type="org.polarsys.capella.core.data.cs:ComponentRealization"
               id="a9e0cb4f-2252-4d7b-a055-f2daabc863a6" targetElement="#b9ac1c49-3499-4c5d-bae1-c00d17e36c62"
               sourceElement="#68e997f0-34f1-4d82-bc8a-1e1d905d9721"/>
+        </ownedLogicalComponents>
+        <ownedLogicalComponents xsi:type="org.polarsys.capella.core.data.la:LogicalComponent"
+            id="8588fe27-3554-43fb-9279-c335600a9988" name="Car" actor="true">
+          <ownedTraces xsi:type="org.polarsys.capella.core.data.capellacommon:TransfoLink"
+              id="bf6fce04-f1bd-47f7-9c75-c0691ca93016" targetElement="#a26593ca-39e7-4e48-a719-637592f7dcc5"
+              sourceElement="#d791f18f-6e72-4446-b2d6-aa0eaf66b813"/>
+          <ownedTraces xsi:type="org.polarsys.capella.core.data.capellacommon:TransfoLink"
+              id="8d9af396-7279-4937-9b8a-fd5d15886f78" targetElement="#34dde9f4-6c45-451b-93da-56a83c75120a"
+              sourceElement="#da8f5a5d-1e03-4f94-8981-83a528b0a8ea"/>
+          <ownedFunctionalAllocation xsi:type="org.polarsys.capella.core.data.fa:ComponentFunctionalAllocation"
+              id="d791f18f-6e72-4446-b2d6-aa0eaf66b813" targetElement="#f824a579-895e-487e-baee-c9770a7d01c0"
+              sourceElement="#8588fe27-3554-43fb-9279-c335600a9988"/>
+          <ownedFunctionalAllocation xsi:type="org.polarsys.capella.core.data.fa:ComponentFunctionalAllocation"
+              id="da8f5a5d-1e03-4f94-8981-83a528b0a8ea" targetElement="#66ff6bfd-fb51-4a86-9d5d-bdb4e4c53b0d"
+              sourceElement="#8588fe27-3554-43fb-9279-c335600a9988"/>
+          <ownedComponentRealizations xsi:type="org.polarsys.capella.core.data.cs:ComponentRealization"
+              id="6c4c84b2-5fea-49cf-9974-9d32a9f48f05" targetElement="#1e04cb83-4cbb-47f6-abcf-52a994a6db47"
+              sourceElement="#8588fe27-3554-43fb-9279-c335600a9988"/>
+        </ownedLogicalComponents>
+        <ownedLogicalComponents xsi:type="org.polarsys.capella.core.data.la:LogicalComponent"
+            id="331f3f76-6478-4c12-aa99-7f5d632e4348" name="Traffic Light Control"
+            actor="true">
+          <ownedTraces xsi:type="org.polarsys.capella.core.data.capellacommon:TransfoLink"
+              id="cfea2ff2-c1e0-4916-b800-e1a31f351624" targetElement="#bedef98d-9a3a-4584-9477-29e25c4c1ca3"
+              sourceElement="#f2d1d91a-a677-41f9-a3f1-c69a3d4d9352"/>
+          <ownedTraces xsi:type="org.polarsys.capella.core.data.capellacommon:TransfoLink"
+              id="b1b54468-1e92-45f2-a07c-a49bb62faaf7" targetElement="#5298e6d6-e0d9-4eca-aa59-4ae23080dbdb"
+              sourceElement="#1874fc9a-2628-49d1-8bbb-d690f33d3198"/>
+          <ownedTraces xsi:type="org.polarsys.capella.core.data.capellacommon:TransfoLink"
+              id="24950f82-6636-47d5-b8e1-a86e81962fe5" targetElement="#05ffc9ac-f253-4a27-a332-0d26a0649421"
+              sourceElement="#f1263bbe-63b2-422c-801d-d466a2df2ac5"/>
+          <ownedFunctionalAllocation xsi:type="org.polarsys.capella.core.data.fa:ComponentFunctionalAllocation"
+              id="f2d1d91a-a677-41f9-a3f1-c69a3d4d9352" targetElement="#254fa3af-c3fc-44f4-9acd-b3b45834c7b2"
+              sourceElement="#331f3f76-6478-4c12-aa99-7f5d632e4348"/>
+          <ownedFunctionalAllocation xsi:type="org.polarsys.capella.core.data.fa:ComponentFunctionalAllocation"
+              id="1874fc9a-2628-49d1-8bbb-d690f33d3198" targetElement="#80afa948-047d-4fed-978c-100787d69281"
+              sourceElement="#331f3f76-6478-4c12-aa99-7f5d632e4348"/>
+          <ownedFunctionalAllocation xsi:type="org.polarsys.capella.core.data.fa:ComponentFunctionalAllocation"
+              id="f1263bbe-63b2-422c-801d-d466a2df2ac5" targetElement="#16bc65a2-658d-4b51-ad1a-41e5c403e63f"
+              sourceElement="#331f3f76-6478-4c12-aa99-7f5d632e4348"/>
+          <ownedComponentRealizations xsi:type="org.polarsys.capella.core.data.cs:ComponentRealization"
+              id="6dd774d5-1b06-4666-8dbc-e12f2c873ddf" targetElement="#65f1c61d-5745-40b7-926a-63a15f081fa8"
+              sourceElement="#331f3f76-6478-4c12-aa99-7f5d632e4348"/>
+        </ownedLogicalComponents>
+        <ownedLogicalComponents xsi:type="org.polarsys.capella.core.data.la:LogicalComponent"
+            id="e9fa24aa-94ee-46d7-9937-5b9cc185bd53" name="Sensor" actor="true">
+          <ownedTraces xsi:type="org.polarsys.capella.core.data.capellacommon:TransfoLink"
+              id="9fb7e8cc-8196-40ef-afb0-4dfe498e2984" targetElement="#834ed169-e3a0-4689-8a14-2778f9b462b9"
+              sourceElement="#430d722d-c123-42cf-a83c-c4e231b4119b"/>
+          <ownedTraces xsi:type="org.polarsys.capella.core.data.capellacommon:TransfoLink"
+              id="ab471538-6e4c-4e1f-aec2-7bdafa78674f" targetElement="#32d21cde-58cb-4d8d-a811-fa0f539677bf"
+              sourceElement="#b111e87c-0376-4725-8301-75c2bd437e30"/>
+          <ownedFunctionalAllocation xsi:type="org.polarsys.capella.core.data.fa:ComponentFunctionalAllocation"
+              id="430d722d-c123-42cf-a83c-c4e231b4119b" targetElement="#c0c8396f-9463-42df-8aa1-b2febc1dd40c"
+              sourceElement="#e9fa24aa-94ee-46d7-9937-5b9cc185bd53"/>
+          <ownedFunctionalAllocation xsi:type="org.polarsys.capella.core.data.fa:ComponentFunctionalAllocation"
+              id="b111e87c-0376-4725-8301-75c2bd437e30" targetElement="#81e6e3a8-c604-45a0-b15a-862ca29680b4"
+              sourceElement="#e9fa24aa-94ee-46d7-9937-5b9cc185bd53"/>
+          <ownedComponentRealizations xsi:type="org.polarsys.capella.core.data.cs:ComponentRealization"
+              id="b4edddce-0c01-4153-bfbf-7e1ab625fc20" targetElement="#418a1df4-b56a-4d6e-bd30-c4d6366db639"
+              sourceElement="#e9fa24aa-94ee-46d7-9937-5b9cc185bd53"/>
         </ownedLogicalComponents>
       </ownedLogicalComponentPkg>
       <ownedSystemAnalysisRealizations xsi:type="org.polarsys.capella.core.data.la:SystemAnalysisRealization"
